@@ -1,6 +1,6 @@
 {
   "name": "mocha-testrail-reporter",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "A Testrail reporter for mocha including TestRail API basic library",
   "main": "index.js",
   "keywords": [
