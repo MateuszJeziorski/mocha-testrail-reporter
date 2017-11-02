@@ -66,6 +66,10 @@ var TestRail = /** @class */ (function () {
      */
     TestRail.prototype.publish = function (name, description, results, callback) {
         var _this = this;
+        if (process.env.TESTRAIL_DISABLED) {
+            console.warn("Testrail report disabled");
+            return;
+        }
         console.log("Publishing " + results.length + " test result(s) to " + this.base);
         var now = formatDate(new Date());
         results.forEach(function (result) {

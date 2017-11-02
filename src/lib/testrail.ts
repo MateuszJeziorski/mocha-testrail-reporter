@@ -76,6 +76,10 @@ export class TestRail {
    * @param callback
    */
   public publish(name: string, description: string, results: TestRailResult[], callback?): void {
+    if (process.env.TESTRAIL_DISABLED) {
+      console.warn("Testrail report disabled");
+      return;
+    }
     console.log(`Publishing ${results.length} test result(s) to ${this.base}`);
 
     const now = formatDate(new Date());

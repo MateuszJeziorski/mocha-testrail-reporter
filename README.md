@@ -59,6 +59,9 @@ Only passed or failed tests will be published. Skipped or pending tests will not
 
 **assignedToId**: *number* (optional) user id which will be assigned failed tests
 
+## Kill switch
+To disable testrail report, you may set env var `TESTRAIL_DISABLED=true`, ex. `TESTRAIL_DISABLED=true mocha`
+
 ## References
 - http://mochajs.org/#mochaopts
 - https://github.com/mochajs/mocha/wiki/Third-party-reporters
