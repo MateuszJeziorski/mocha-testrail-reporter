@@ -13,7 +13,7 @@ export class MochaTestRailReporter extends reporters.Spec {
   constructor(runner: any, options: any) {
     super(runner);
 
-    if (process.env.TESTRAIL_DISABLED) {
+    if (!process.env.TESTRAIL_USE) {
       return;
     }
 

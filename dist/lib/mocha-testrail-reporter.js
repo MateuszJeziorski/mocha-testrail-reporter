@@ -23,7 +23,7 @@ var MochaTestRailReporter = /** @class */ (function (_super) {
         _this.fails = 0;
         _this.pending = 0;
         _this.out = [];
-        if (process.env.TESTRAIL_DISABLED) {
+        if (!process.env.TESTRAIL_USE) {
             return _this;
         }
         var reporterOptions = options.reporterOptions;
