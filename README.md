@@ -28,6 +28,11 @@ mocha --opts mocha-testrail.opts build/test
 --no-exit
 ```
 
+Username and password may be passed using env variables
+```typescript
+this.username = process.env.TESTRAIL_USERNAME || options.username;
+this.password = process.env.TESTRAIL_PASSWORD || options.password;
+```
 
 Mark your mocha test names with ID of Testrail test cases. Ensure that your case ids are well distinct from test descriptions.
  

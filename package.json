@@ -26,21 +26,25 @@
     "tsc": "tsc",
     "clean": "rimraf dist",
     "test": "mocha dist/test",
-    "build": "npm run clean && npm run tsc"
+    "build": "npm run clean && npm run tsc",
+    "reformat": "prettier --print-width 100 --write '**/*.ts'",
+    "tslint": "tslint --type-check --project tsconfig.json -c tslint.json --exclude 'node_modules'",
+    "tslint:fix": "npm run tslint -- --fix"
   },
   "dependencies": {
     "btoa": "^1.1.2",
     "unirest": "^0.5.1"
-  },
-  "peerDependencies": {
-    "mocha": "^3 || ^2.2.5"
   },
   "devDependencies": {
     "@types/chai": "^3.4.34",
     "@types/mocha": "^2.2.36",
     "@types/node": "^6.0.58",
     "chai": "^3.5.0",
+    "mocha": "^4.0.1",
+    "prettier": "^1.5.3",
     "rimraf": "^2.5.4",
-    "typescript": "^2.1.4"
+    "tslint": "^5.7.0",
+    "tslint-sonarts": "^1.0.0",
+    "typescript": "2.5.2"
   }
 }
