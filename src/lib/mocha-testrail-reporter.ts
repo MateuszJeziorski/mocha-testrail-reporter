@@ -14,11 +14,15 @@ export class MochaTestRailReporter extends reporters.Spec {
     super(runner);
 
     const reporterOptions: TestRailOptions = options.reporterOptions as TestRailOptions;
-    this.validate(reporterOptions, "domain");
-    this.validate(reporterOptions, "username");
-    this.validate(reporterOptions, "password");
-    this.validate(reporterOptions, "projectId");
-    this.validate(reporterOptions, "suiteId");
+    this.validate(reporterOptions, ["domain", "url"]);
+    if (!process.env.TESTRAIL_USERNAME) {
+      this.validate(reporterOptions, ["username"]);
+    }
+    if (!process.env.TESTRAIL_PASSWORD) {
+      this.validate(reporterOptions, ["password"]);
+    }
+    this.validate(reporterOptions, ["projectId"]);
+    this.validate(reporterOptions, ["suiteId"]);
 
     runner.on("start", () => {
       /* ignore */
@@ -104,12 +108,14 @@ ${this.out.join("\n")}
     });
   }
 
-  private validate(options: TestRailOptions, name: string) {
+  private validate(options: TestRailOptions, names: string[]) {
     if (options == null) {
       throw new Error("Missing --reporter-options in mocha.opts");
     }
-    if (options[name] == null) {
-      throw new Error(`Missing ${name} value. Please update --reporter-options in mocha.opts`);
+    if (names.every(name => !options[name])) {
+      throw new Error(
+        `Missing one of [${names.join(",")}] option. Please update --reporter-options in mocha.opts`
+      );
     }
   }
 }

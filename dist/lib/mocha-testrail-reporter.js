@@ -24,11 +24,15 @@ var MochaTestRailReporter = /** @class */ (function (_super) {
         _this.pending = 0;
         _this.out = [];
         var reporterOptions = options.reporterOptions;
-        _this.validate(reporterOptions, "domain");
-        _this.validate(reporterOptions, "username");
-        _this.validate(reporterOptions, "password");
-        _this.validate(reporterOptions, "projectId");
-        _this.validate(reporterOptions, "suiteId");
+        _this.validate(reporterOptions, ["domain", "url"]);
+        if (!process.env.TESTRAIL_USERNAME) {
+            _this.validate(reporterOptions, ["username"]);
+        }
+        if (!process.env.TESTRAIL_PASSWORD) {
+            _this.validate(reporterOptions, ["password"]);
+        }
+        _this.validate(reporterOptions, ["projectId"]);
+        _this.validate(reporterOptions, ["suiteId"]);
         runner.on("start", function () {
             /* ignore */
         });
@@ -98,12 +102,12 @@ var MochaTestRailReporter = /** @class */ (function (_super) {
         });
         return _this;
     }
-    MochaTestRailReporter.prototype.validate = function (options, name) {
+    MochaTestRailReporter.prototype.validate = function (options, names) {
         if (options == null) {
             throw new Error("Missing --reporter-options in mocha.opts");
         }
-        if (options[name] == null) {
-            throw new Error("Missing " + name + " value. Please update --reporter-options in mocha.opts");
+        if (names.every(function (name) { return !options[name]; })) {
+            throw new Error("Missing one of [" + names.join(",") + "] option. Please update --reporter-options in mocha.opts");
         }
     };
     return MochaTestRailReporter;
