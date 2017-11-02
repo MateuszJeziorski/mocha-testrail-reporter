@@ -47,6 +47,8 @@ Only passed or failed tests will be published. Skipped or pending tests will not
 
 **domain**: *string* domain name of your Testrail instance (e.g. for a hosted instance instance.testrail.net)
 
+**url**: *string* instead of domain, url with protocol and path may be provided
+
 **username**: *string* user under which the test run will be created (e.g. jenkins or ci)
 
 **password**: *string* password or API token for user
