@@ -13,6 +13,10 @@ export class MochaTestRailReporter extends reporters.Spec {
   constructor(runner: any, options: any) {
     super(runner);
 
+    if (process.env.TESTRAIL_DISABLED) {
+      return;
+    }
+
     const reporterOptions: TestRailOptions = options.reporterOptions as TestRailOptions;
     this.validate(reporterOptions, ["domain", "url"]);
     if (!process.env.TESTRAIL_USERNAME) {

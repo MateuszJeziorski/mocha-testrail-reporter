@@ -23,6 +23,9 @@ var MochaTestRailReporter = /** @class */ (function (_super) {
         _this.fails = 0;
         _this.pending = 0;
         _this.out = [];
+        if (process.env.TESTRAIL_DISABLED) {
+            return _this;
+        }
         var reporterOptions = options.reporterOptions;
         _this.validate(reporterOptions, ["domain", "url"]);
         if (!process.env.TESTRAIL_USERNAME) {
