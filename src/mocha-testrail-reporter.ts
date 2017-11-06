@@ -64,8 +64,7 @@ export class MochaTestRailReporter extends reporters.Spec {
       }
       const total = this.passes + this.fails + this.pending;
 
-      const description = `Automated test run executed on ${new Date().toISOString()}
-Execution summary:
+      const description = `Execution summary:
 Passes: ${this.passes}
 Fails: ${this.fails}
 Pending: ${this.pending}
@@ -84,7 +83,8 @@ ${this.out.join("\n")}
 
     let comment = test.title;
     if (status === Status.Failed) {
-      comment = `${test.title} (${test.duration}ms)`;
+      comment = `${test.title}
+${test.err}`;
     } else if (test.speed === "fast") {
       comment = `${test.title} (${test.duration}ms)`;
     }

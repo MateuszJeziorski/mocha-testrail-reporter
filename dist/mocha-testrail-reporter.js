@@ -52,8 +52,7 @@ class MochaTestRailReporter extends mocha_1.reporters.Spec {
                 console.warn("No testcases were matched. Ensure that your tests are declared correctly and matches TCxxx");
             }
             const total = this.passes + this.fails + this.pending;
-            const description = `Automated test run executed on ${new Date().toISOString()}
-Execution summary:
+            const description = `Execution summary:
 Passes: ${this.passes}
 Fails: ${this.fails}
 Pending: ${this.pending}
@@ -70,7 +69,8 @@ ${this.out.join("\n")}
         const suiteId = shared_1.titleToSuiteId(test.fullTitle());
         let comment = test.title;
         if (status === testrail_interface_1.Status.Failed) {
-            comment = `${test.title} (${test.duration}ms)`;
+            comment = `${test.title}
+${test.err}`;
         }
         else if (test.speed === "fast") {
             comment = `${test.title} (${test.duration}ms)`;
