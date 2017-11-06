@@ -1,5 +1,5 @@
 import { reporters } from "mocha";
-import { titleToCaseIds } from "./shared";
+import { titleToCaseIds, titleToSuiteId } from "./shared";
 import { TestRail } from "./testrail";
 import { Status, TestRailOptions, TestRailResult } from "./testrail.interface";
 
@@ -26,13 +26,12 @@ export class MochaTestRailReporter extends reporters.Spec {
       this.validate(reporterOptions, ["password"]);
     }
     this.validate(reporterOptions, ["projectId"]);
-    this.validate(reporterOptions, ["suiteId"]);
 
     runner.on("start", () => {
       /* ignore */
     });
 
-    runner.on("suite", () => {
+    runner.on("suite", suite => {
       /* ignore */
     });
 
@@ -48,45 +47,13 @@ export class MochaTestRailReporter extends reporters.Spec {
     runner.on("pass", test => {
       this.passes++;
       this.out.push(test.fullTitle() + ": pass");
-      const caseIds = titleToCaseIds(test.title);
-      if (caseIds.length > 0) {
-        if (test.speed === "fast") {
-          const results = caseIds.map(caseId => {
-            return {
-              case_id: caseId,
-              status_id: Status.Passed,
-              comment: test.title
-            };
-          });
-          this.results.push(...results);
-        } else {
-          const results = caseIds.map(caseId => {
-            return {
-              case_id: caseId,
-              status_id: Status.Passed,
-              comment: `${test.title} (${test.duration}ms)`
-            };
-          });
-          this.results.push(...results);
-        }
-      }
+      this.addResults(test, Status.Passed);
     });
 
     runner.on("fail", test => {
       this.fails++;
       this.out.push(test.fullTitle() + ": fail");
-      const caseIds = titleToCaseIds(test.title);
-      if (caseIds.length > 0) {
-        const results = caseIds.map(caseId => {
-          return {
-            case_id: caseId,
-            status_id: Status.Failed,
-            comment: `${test.title}
-${test.err}`
-          };
-        });
-        this.results.push(...results);
-      }
+      this.addResults(test, Status.Failed);
     });
 
     runner.on("end", () => {
@@ -95,10 +62,9 @@ ${test.err}`
           "No testcases were matched. Ensure that your tests are declared correctly and matches TCxxx"
         );
       }
-      const executionDateTime = new Date().toISOString();
       const total = this.passes + this.fails + this.pending;
-      const name = `Automated test run ${executionDateTime}`;
-      const description = `Automated test run executed on ${executionDateTime}
+
+      const description = `Automated test run executed on ${new Date().toISOString()}
 Execution summary:
 Passes: ${this.passes}
 Fails: ${this.fails}
@@ -108,8 +74,32 @@ Total: ${total}
 Execution details:
 ${this.out.join("\n")}
 `;
-      new TestRail(reporterOptions).publish(name, description, this.results);
+      new TestRail(reporterOptions).publish(description, this.results);
     });
+  }
+
+  private addResults(test, status: Status) {
+    const caseIds = titleToCaseIds(test.title);
+    const suiteId = titleToSuiteId(test.fullTitle());
+
+    let comment = test.title;
+    if (status === Status.Failed) {
+      comment = `${test.title} (${test.duration}ms)`;
+    } else if (test.speed === "fast") {
+      comment = `${test.title} (${test.duration}ms)`;
+    }
+
+    if (suiteId && caseIds.length > 0) {
+      const results: TestRailResult[] = caseIds.map(caseId => {
+        return {
+          suiteId,
+          case_id: caseId,
+          status_id: status,
+          comment
+        };
+      });
+      this.results.push(...results);
+    }
   }
 
   private validate(options: TestRailOptions, names: string[]) {

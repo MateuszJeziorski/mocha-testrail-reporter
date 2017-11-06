@@ -16,7 +16,7 @@ Ensure that your testrail installation API is enabled and generate your API keys
 Run mocha with `mocha-testrail-reporter`:
 
 ```shell
-$ mocha test --reporter mocha-testrail-reporter --reporter-options domain=instance.testrail.net,username=test@example.com,password=12345678,projectId=1,suiteId=1
+$ mocha test --reporter mocha-testrail-reporter --reporter-options domain=instance.testrail.net,username=test@example.com,password=12345678,projectId=1
 ```
 
 or use a mocha.options file
@@ -24,7 +24,7 @@ or use a mocha.options file
 mocha --opts mocha-testrail.opts build/test
 --recursive
 --reporter mocha-testrail-reporter
---reporter-options domain=instance.testrail.net,username=test@example.com,password=12345678,projectId=1,suiteId=1
+--reporter-options domain=instance.testrail.net,username=test@example.com,password=12345678,projectId=1
 --no-exit
 ```
 
@@ -34,11 +34,14 @@ this.username = process.env.TESTRAIL_USERNAME || options.username;
 this.password = process.env.TESTRAIL_PASSWORD || options.password;
 ```
 
-Mark your mocha test names with ID of Testrail test cases. Ensure that your case ids are well distinct from test descriptions.
- 
-```Javascript
-it("C123 C124 Authenticate with invalid user", . . .
-it("Authenticate a valid user C321", . . .
+Mark your mocha suites with ID of Testrail suite and mark your test names with ID of Testrail test cases. 
+Ensure that your ids are well distinct from test descriptions.
+
+```javascript
+describe("S2988 Authentication", () => {
+  it("C123 C124 Authenticate with invalid user", () => {});
+  it("Authenticate a valid user C321", () => {});
+});
 ```
 
 Only passed or failed tests will be published. Skipped or pending tests will not be published resulting in a "Pending" status in testrail test run.

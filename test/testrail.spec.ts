@@ -1,7 +1,7 @@
-import { TestRail } from "../lib/testrail";
-import { Status, TestRailCase, TestRailResult } from "../lib/testrail.interface";
+import { TestRail } from "../src/testrail";
+import { Status } from "../src/testrail.interface";
 
-describe("TestRail API", () => {
+describe.skip("TestRail API", () => {
   it("Publish test run", done => {
     const testRail = new TestRail({
       domain: process.env.DOMAIN,
@@ -12,31 +12,28 @@ describe("TestRail API", () => {
       // assignedToId: 2,
     });
 
-    testRail.fetchCases({ type_id: [3], priority_id: [4] }, (cases: TestRailCase[]) => {
-      console.log(cases);
-      cases.forEach(value => {
-        console.log(value.id, value.title);
-      });
-    });
-
     testRail.publish(
       "Unit Test of mocha-testrail-reporter",
       "Unit Test of mocha-testrail-reporter",
       [
         {
+          suiteId: 1,
           case_id: 3033,
           status_id: Status.Passed,
           comment: "Passing...."
         },
         {
+          suiteId: 1,
           case_id: 3034,
           status_id: Status.Passed
         },
         {
+          suiteId: 1,
           case_id: 3035,
           status_id: Status.Passed
         },
         {
+          suiteId: 1,
           case_id: 3036,
           status_id: Status.Failed,
           comment: "Failure...."
