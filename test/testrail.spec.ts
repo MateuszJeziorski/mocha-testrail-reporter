@@ -8,12 +8,10 @@ describe.skip("TestRail API", () => {
       username: process.env.USERNAME,
       password: process.env.PASSWORD,
       projectId: 10,
-      suiteId: 104
-      // assignedToId: 2,
+      assignedToId: 2
     });
 
     testRail.publish(
-      "Unit Test of mocha-testrail-reporter",
       "Unit Test of mocha-testrail-reporter",
       [
         {
